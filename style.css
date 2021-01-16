@@ -1,0 +1,103 @@
+/* Todo, clean up css, and make the cards look prettier */
+
+body {
+  background: rgba(130, 202, 111, 0.2);
+  font-family: sans-serif;
+}
+
+table {
+  border: 1px solid black;
+}
+
+h2 {
+  text-align: center;
+}
+
+#form input {
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  align-items: center;
+  text-align: center;
+}
+
+#form input.read {
+  width: 15px;
+}
+
+#showBook {
+  background-color: rgb(62, 235, 251);
+  width: 100px;
+  padding: 10px;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  margin: 0 auto;
+  display: block;
+}
+
+#submit {
+  background-color: rgb(84, 251, 62);
+  width: 100px;
+  padding: 10px;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  margin: 0 auto;
+  display: block;
+}
+
+.deleteBtn {
+  background-color: rgb(221, 26, 26);
+  width: 100px;
+  padding: 10px;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  margin: 0 auto;
+  display: block;
+}
+
+.books {
+  display: block;
+  margin: 20px auto;
+  width: 300px;
+  height: 280px;
+  border: 1px solid black;
+  border-radius: 40px;
+  text-align: center;
+}
+
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.readStatus {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 auto;
+  width: 100px;
+  height: 50px;
+}
+
+#form {
+  display: none;
+  margin: 10% auto;
+  width: 500px;
+  padding: 0 20px 20px 20px;
+  background: #ffffff;
+  border: 2px solid;
+}
+
+#form h1 {
+  text-align: center;
+}
+
+.readStatus p {
+  margin: 0 auto;
+  margin-left: 0;
+}

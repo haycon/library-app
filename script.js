@@ -3,23 +3,24 @@ function Book(title, author, pages, read) {
   this.author = author;
   this.pages = pages;
   this.read = read;
-  this.info = function () {
-    return title + author + pages + read;
-  };
 }
 
-const LOTR = new Book('Lord Of the Rings', 'J.R.R Tolkien', 450, 'Read');
+Book.prototype.info = function () {
+  return title + ' by ' + author + ', ' + pages + ' pages, ' + read;
+};
+
+const LOTR = new Book('Lord Of the Rings', 'J.R.R Tolkien', 450, true);
+const HarryPotter1 = new Book('Harry Potter1', 'J.K Rowling', 500, true);
+const HarryPotter2 = new Book('Harry Potter2', 'J.K Rowling', 600, true);
+const HarryPotter3 = new Book('Harry Potter3', 'J.K Rowling', 700, true);
+const HarryPotter4 = new Book('Harry Potter4', 'J.K Rowling', 800, true);
+const HarryPotter5 = new Book('Harry Potter5', 'J.K Rowling', 800, true);
 const Hitchiker = new Book(
   'Hitchikers Guide To the Galaxy',
   'Douglas Adams',
   400,
-  'Read'
+  true
 );
-const HarryPotter1 = new Book('Harry Potter1', 'J.K Rowling', 500, 'Read');
-const HarryPotter2 = new Book('Harry Potter2', 'J.K Rowling', 600, 'Read');
-const HarryPotter3 = new Book('Harry Potter3', 'J.K Rowling', 700, 'Read');
-const HarryPotter4 = new Book('Harry Potter4', 'J.K Rowling', 800, 'Read');
-const HarryPotter5 = new Book('Harry Potter5', 'J.K Rowling', 800, 'Not read');
 
 let myLibrary = [
   HarryPotter1,
@@ -36,10 +37,7 @@ let addBookToLibrary = () => {
   let author1 = document.getElementById('author').value;
   let pages1 = document.getElementById('pages').value;
   let read1 = document.getElementById('read').checked;
-  let newBook = new Book(title1, author1, pages1, read1);
-  myLibrary.push(newBook);
-
-  const d = document.createElement('div');
+  const div = document.createElement('div');
   const a = document.createElement('div');
   const title = document.createElement('h3');
   const author = document.createElement('p');
@@ -47,23 +45,17 @@ let addBookToLibrary = () => {
   const read = document.createElement('p');
   const btn = document.createElement('button');
   const checkbox = document.createElement('input');
+
+  let newBook = new Book(title1, author1, pages1, read1);
+  myLibrary.push(newBook);
+
   let s = document.querySelector('.main');
-  d.classList.add('books');
+  div.classList.add('books');
   checkbox.type = 'checkbox';
   btn.classList.add('deleteBtn');
-
-  s.appendChild(d);
-  d.appendChild(title);
-  d.appendChild(author);
-  d.appendChild(pages);
-  d.appendChild(a);
-  a.appendChild(read);
-  a.appendChild(checkbox);
-  d.appendChild(btn);
-
   a.classList.add('readStatus');
   checkbox.classList.add('checked');
-  d.setAttribute('data-id', myLibrary.length);
+  div.setAttribute('data-id', myLibrary.length);
   title.innerHTML = 'Title: ' + title1;
   author.innerHTML = 'Author: ' + author1;
   pages.innerHTML = 'Pages: ' + pages1;
@@ -89,6 +81,15 @@ let addBookToLibrary = () => {
     myLibrary.splice(index, 1);
     selector.parentNode.removeChild(selector);
   });
+
+  s.appendChild(div);
+  div.appendChild(title);
+  div.appendChild(author);
+  div.appendChild(pages);
+  div.appendChild(a);
+  a.appendChild(read);
+  a.appendChild(checkbox);
+  div.appendChild(btn);
 };
 
 const submit = document.getElementById('submit');
@@ -96,8 +97,18 @@ submit.addEventListener('click', () => {
   addBookToLibrary();
 });
 
-let displayBooks = () => {
-  myLibrary.forEach((e, index) => {
+//Toggles read status
+const toggleRead = (book) => {
+  book.read = !book.read;
+  if (event.path[1].children[0].innerHTML == 'Read') {
+    event.path[1].children[0].innerHTML = 'Not read';
+  } else {
+    event.path[1].children[0].innerHTML = 'Read';
+  }
+};
+
+const displayBooks = () => {
+  myLibrary.forEach((book, index) => {
     const d = document.createElement('div');
     const a = document.createElement('div');
     const title = document.createElement('h3');
@@ -110,7 +121,7 @@ let displayBooks = () => {
     d.classList.add('books');
 
     checkbox.type = 'checkbox';
-    if (e.read == 'Read') {
+    if (book.read == true) {
       checkbox.checked = true;
     }
     btn.classList.add('deleteBtn');
@@ -124,13 +135,21 @@ let displayBooks = () => {
     a.appendChild(checkbox);
     d.appendChild(btn);
 
+    d.id = book.title;
     a.classList.add('readStatus');
     checkbox.classList.add('checked');
+    checkbox.addEventListener('click', function () {
+      toggleRead(book);
+    });
     d.setAttribute('data-id', index);
-    title.innerHTML = 'Title: ' + e.title;
-    author.innerHTML = 'Author: ' + e.author;
-    pages.innerHTML = 'Pages: ' + e.pages;
-    read.innerHTML = e.read;
+    title.innerHTML = 'Title: ' + book.title;
+    author.innerHTML = 'Author: ' + book.author;
+    pages.innerHTML = 'Pages: ' + book.pages;
+    if (read) {
+      read.innerHTML = 'Read';
+    } else {
+      read.innerHTML = 'Not read';
+    }
     btn.innerHTML = 'Delete';
   });
 };
@@ -165,22 +184,3 @@ let deleteBook = (id) => {
   myLibrary.splice(index, 1);
   selector.parentNode.removeChild(selector);
 };
-
-//Toggles read status
-let check = document.querySelectorAll('.checked');
-check.forEach((e) => {
-  e.addEventListener('click', (a) => {
-    if (
-      e.parentNode.parentNode.querySelector('.readStatus').querySelector('p')
-        .innerHTML == 'Read'
-    ) {
-      e.parentNode.parentNode
-        .querySelector('.readStatus')
-        .querySelector('p').innerHTML = 'Not read';
-    } else {
-      e.parentNode.parentNode
-        .querySelector('.readStatus')
-        .querySelector('p').innerHTML = 'Read';
-    }
-  });
-});

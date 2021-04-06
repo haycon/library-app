@@ -47,50 +47,58 @@ let addBookToLibrary = () => {
   let pages1 = document.getElementById('pages').value;
   let read1 = document.getElementById('read').checked;
 
-  let newBook = new Book(title1, author1, pages1, read1);
-  myLibrary.push(newBook);
-
-  let s = document.getElementById('main');
-  div.classList.add('books');
-  checkbox.type = 'checkbox';
-  btn.classList.add('deleteBtn');
-  a.classList.add('readStatus');
-  checkbox.classList.add('checked');
-  div.setAttribute('data-id', myLibrary.length);
-  title.innerHTML = 'Title: ' + title1;
-  author.innerHTML = 'Author: ' + author1;
-  pages.innerHTML = 'Pages: ' + pages1;
-  if (read1 == true) {
-    read.innerHTML = 'Read';
-    checkbox.checked = true;
-  } else {
-    read.innerHTML = 'Not read';
-  }
-
-  checkbox.addEventListener('click', (e) => {
-    if (e.path[1].querySelector('p').innerHTML == 'Read') {
-      e.path[1].querySelector('p').innerHTML = 'Not read';
+  if (
+    //Checks for validity
+    document.getElementById('title').validity.valid &&
+    document.getElementById('author').validity.valid &&
+    document.getElementById('pages').validity.valid
+  ) {
+    let newBook = new Book(title1, author1, pages1, read1);
+    myLibrary.push(newBook);
+    let s = document.getElementById('main');
+    div.classList.add('books');
+    checkbox.type = 'checkbox';
+    btn.classList.add('deleteBtn');
+    a.classList.add('readStatus');
+    checkbox.classList.add('checked');
+    div.setAttribute('data-id', myLibrary.length);
+    title.innerHTML = 'Title: ' + title1;
+    author.innerHTML = 'Author: ' + author1;
+    pages.innerHTML = 'Pages: ' + pages1;
+    if (read1 == true) {
+      read.innerHTML = 'Read';
+      checkbox.checked = true;
     } else {
-      e.path[1].querySelector('p').innerHTML = 'Read';
+      read.innerHTML = 'Not read';
     }
-  });
 
-  btn.innerHTML = 'Delete';
-  btn.addEventListener('click', (id) => {
-    let selector = id.path[1];
-    let index = id.path[1].getAttribute('data-id');
-    myLibrary.splice(index, 1);
-    selector.parentNode.removeChild(selector);
-  });
+    checkbox.addEventListener('click', (e) => {
+      if (e.path[1].querySelector('p').innerHTML == 'Read') {
+        e.path[1].querySelector('p').innerHTML = 'Not read';
+      } else {
+        e.path[1].querySelector('p').innerHTML = 'Read';
+      }
+    });
 
-  s.appendChild(div);
-  div.appendChild(title);
-  div.appendChild(author);
-  div.appendChild(pages);
-  div.appendChild(a);
-  a.appendChild(read);
-  a.appendChild(checkbox);
-  div.appendChild(btn);
+    btn.innerHTML = 'Delete';
+    btn.addEventListener('click', (id) => {
+      let selector = id.path[1];
+      let index = id.path[1].getAttribute('data-id');
+      myLibrary.splice(index, 1);
+      selector.parentNode.removeChild(selector);
+    });
+    divError.remove();
+    s.appendChild(div);
+    div.appendChild(title);
+    div.appendChild(author);
+    div.appendChild(pages);
+    div.appendChild(a);
+    a.appendChild(read);
+    a.appendChild(checkbox);
+    div.appendChild(btn);
+  } else {
+    showError();
+  }
 };
 
 const submit = document.getElementById('submit');
@@ -190,20 +198,26 @@ let deleteBook = (id) => {
 const form = document.getElementsByTagName('form')[0];
 const title = document.getElementById('title');
 
-form.addEventListener('submit', function (event) {
-  // if the form contains valid data, we let it submit
-  console.log('rosk');
-  if (!title.validity.valid) {
-    console.log('ins');
-    // If it isn't, we display an appropriate error message
-    showError();
-    // Then we prevent the form from being sent by canceling the event
-  }
-});
-
 function showError() {
-  if (title.validity.valueMissing) {
-    // display the following error message.
-    title.textContent = 'You need to fill out this field.';
+  const divError = document.createElement('div');
+  divError.id = 'divError';
+  const titleError = document.getElementById('title');
+  const errorMessage = document.createElement('p');
+
+  if (titleError.validity.valueMissing) {
+    errorMessage.innerHTML = 'You need to fill out the title field.';
+    form1.appendChild(divError);
+    divError.appendChild(errorMessage);
+  }
+  if (author.validity.valueMissing) {
+    errorMessage.innerHTML = 'You need to fill out the author field.';
+    form1.appendChild(divError);
+    divError.appendChild(errorMessage);
+  }
+
+  if (pages.validity.valueMissing) {
+    errorMessage.innerHTML = 'You need to fill out the pages field.';
+    form1.appendChild(divError);
+    divError.appendChild(errorMessage);
   }
 }

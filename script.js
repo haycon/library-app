@@ -31,12 +31,9 @@ let myLibrary = [
   Hitchiker,
   LOTR,
 ];
+let title1 = document.getElementById('title').value;
 
 let addBookToLibrary = () => {
-  let title1 = document.getElementById('title').value;
-  let author1 = document.getElementById('author').value;
-  let pages1 = document.getElementById('pages').value;
-  let read1 = document.getElementById('read').checked;
   const div = document.createElement('div');
   const a = document.createElement('div');
   const title = document.createElement('h3');
@@ -45,11 +42,15 @@ let addBookToLibrary = () => {
   const read = document.createElement('p');
   const btn = document.createElement('button');
   const checkbox = document.createElement('input');
+  let title1 = document.getElementById('title').value;
+  let author1 = document.getElementById('author').value;
+  let pages1 = document.getElementById('pages').value;
+  let read1 = document.getElementById('read').checked;
 
   let newBook = new Book(title1, author1, pages1, read1);
   myLibrary.push(newBook);
 
-  let s = document.querySelector('.main');
+  let s = document.getElementById('main');
   div.classList.add('books');
   checkbox.type = 'checkbox';
   btn.classList.add('deleteBtn');
@@ -93,8 +94,9 @@ let addBookToLibrary = () => {
 };
 
 const submit = document.getElementById('submit');
-submit.addEventListener('click', () => {
+submit.addEventListener('click', (event) => {
   addBookToLibrary();
+  event.preventDefault();
 });
 
 //Toggles read status
@@ -117,7 +119,7 @@ const displayBooks = () => {
     const read = document.createElement('p');
     const btn = document.createElement('button');
     const checkbox = document.createElement('input');
-    let s = document.querySelector('.main');
+    let s = document.getElementById('main');
     d.classList.add('books');
 
     checkbox.type = 'checkbox';
@@ -184,3 +186,24 @@ let deleteBook = (id) => {
   myLibrary.splice(index, 1);
   selector.parentNode.removeChild(selector);
 };
+
+const form = document.getElementsByTagName('form')[0];
+const title = document.getElementById('title');
+
+form.addEventListener('submit', function (event) {
+  // if the form contains valid data, we let it submit
+  console.log('rosk');
+  if (!title.validity.valid) {
+    console.log('ins');
+    // If it isn't, we display an appropriate error message
+    showError();
+    // Then we prevent the form from being sent by canceling the event
+  }
+});
+
+function showError() {
+  if (title.validity.valueMissing) {
+    // display the following error message.
+    title.textContent = 'You need to fill out this field.';
+  }
+}
